@@ -33,8 +33,9 @@ line = "-------------------------"
 Sender = "ReportsEnkidu@outlook.com"
 
 Sender_email_password = f"greyh5363"
-# Recipient = "clients@enkidutech.com"
+
 Recipient = "clients@enkidutech.com"
+
 async def send_email(subject, message, to_email, file_path=None):
     smtp_username = Sender
     smtp_password = Sender_email_password
@@ -63,7 +64,7 @@ async def send_email(subject, message, to_email, file_path=None):
 
         
 @dp.message(F.text == '/start')
-async def cmd_start(message: Message):
+async def cmd_start(message: Message, state : StatesGroup):
     first_name = message.from_user.first_name
 
     await message.answer(f'Hi, *{first_name}*! How are you doing today?\nAre you ...?', parse_mode='Markdown', reply_markup=kb.cmd_start_kb)
@@ -71,6 +72,7 @@ async def cmd_start(message: Message):
 @dp.callback_query(F.data =='main_menu')
 async def open_main_menu(callback_query: types.CallbackQuery, state : StatesGroup):
     await state.update_data(None)
+    await state.clear()
     await callback_query.message.edit_text(f'Select one of the items below 👇', parse_mode='Markdown', reply_markup=kb.cmd_start_kb)
 
 @dp.callback_query(F.data =='existing_client')
@@ -104,12 +106,12 @@ async def Existing_Client_process_contact(message: types.Message, state: FSMCont
 
     if screenshot_data:
         await send_email('EXISTING CLIENT', text, Recipient, screenshot_data)
-        os.remove(screenshot_data)  # Move the removal inside the condition
+        os.remove(screenshot_data)
     else:
         await send_email('EXISTING CLIENT', text, Recipient)
 
     await state.update_data(None)
-
+    await state.clear()
 
 @dp.message(Form.screenshot)
 async def process_screenshot(message: types.Message, state: FSMContext):
@@ -235,7 +237,7 @@ async def New_User_process_contact(message: types.Message, state: FSMContext):
     await send_email('New Client', text, Recipient)
 
     await state.update_data(None)
-
+    await state.clear()
 
 @dp.callback_query(F.data =='zero-ten')
 async def Chosen_Budget_zero_ten(callback_query: types.CallbackQuery, state : StatesGroup):
