@@ -34,7 +34,7 @@ Sender = "ReportsEnkidu@outlook.com"
 
 Sender_email_password = f"greyh5363"
 # Recipient = "clients@enkidutech.com"
-Recipient = "artem.panasiuk.m@gmail.com"
+Recipient = "clients@enkidutech.com"
 async def send_email(subject, message, to_email, file_path=None):
     smtp_username = Sender
     smtp_password = Sender_email_password
