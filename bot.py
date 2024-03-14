@@ -65,6 +65,7 @@ async def send_email(subject, message, to_email, file_path=None):
         
 @dp.message(F.text == '/start')
 async def cmd_start(message: Message, state : StatesGroup):
+    await state.clear()
     first_name = message.from_user.first_name
 
     await message.answer(f'Hi, *{first_name}*! How are you doing today?\nAre you ...?', parse_mode='Markdown', reply_markup=kb.cmd_start_kb)
